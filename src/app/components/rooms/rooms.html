@@ -1,0 +1,10 @@
+<h2>Список комнат</h2>
+
+@for (room of rooms$ | async; track room.id) {
+  <div class="room-card">
+    <h3>{{ room.name }}</h3>
+    <p>Вместимость: {{ room.capacity }}</p>
+    <p>Цена за час: {{ room.pricePerHour }} руб.</p>
+    <p>{{ room.description }}</p>
+  </div>
+}
