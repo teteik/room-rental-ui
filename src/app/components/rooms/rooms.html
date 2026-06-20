@@ -1,6 +1,10 @@
 <div class="container">
     <h2 class="mb-4">Список комнат</h2>
 
+    <a [routerLink]="['/rooms/new']" class="btn btn-outline-secondary btn-sm mb-3">
+        Добавить комнату
+    </a>
+
     <div class="row">
     @for (room of rooms$ | async; track room.id) {
         <div class="col-md-6 col-lg-4 mb-4">
