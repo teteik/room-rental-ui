@@ -1,6 +1,6 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { RoomService } from '../../services/room.service';
 import { switchMap } from 'rxjs';
 
@@ -12,6 +12,7 @@ import { switchMap } from 'rxjs';
 })
 export class RoomDetailsComponent {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private roomService = inject(RoomService);
 
   room$ = this.route.paramMap.pipe(
@@ -20,4 +21,17 @@ export class RoomDetailsComponent {
       return this.roomService.getRoomById(id);
     })
   )
+
+  deleteRoom(): void {
+    if (confirm('Вы уверены?')) {
+      const id = this.route.snapshot.paramMap.get('id')!;
+      this.roomService.deleteRoom(id).subscribe({
+        next: () => this.router.navigate(['/rooms']),
+        error: (err) => {
+            console.error('Error deleting room:', err);
+            alert('Не удалось удалить комнату');
+        }
+      });
+    }
+  }
 }

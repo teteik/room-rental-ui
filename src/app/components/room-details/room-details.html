@@ -5,12 +5,12 @@
         Назад
     </a>
     <div class="row">
-        <div class="col-md-5">
+        <div class="col-md-4">
             <div class="bg-secondary d-flex align-items-center justify-content-center" style="height: 300px;">
                 <span class="text-white"> Фото комнаты</span>
             </div>
         </div>
-        <div class="col-md-7">
+        <div class="col-md-8">
             @if (room$ | async; as room) {
                 <div class="card-body">
                     <h5 class="card-title">{{ room.name }}</h5>
@@ -18,6 +18,12 @@
                     <p class="card-text">Цена за час: {{ room.pricePerHour }} руб.</p>
                     <p class="card-text text-muted">{{ room.description }}</p>
                 </div>
+                <a [routerLink]="['/bookings/new']" class="btn btn-outline-secondary btn-sm mb-3">   
+                    Забронировать
+                </a>
+                <button (click)="deleteRoom()" class="btn btn-danger">   
+                    Удалить комнату
+                </button>
             }
         </div>
     </div>
