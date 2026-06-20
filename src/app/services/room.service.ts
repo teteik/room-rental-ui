@@ -33,9 +33,8 @@ export class RoomService {
   deleteRoom(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
-/*
+
   updateRoom(id: string, room: Partial<Room>): Observable<Room> {
-    return this.http.put(this.apiUrl, room, )
+    return this.http.put<Room>(`${this.apiUrl}/${id}`, room);
   }
-*/
 }

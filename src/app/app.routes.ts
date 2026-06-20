@@ -6,6 +6,7 @@ import { RoomFormComponent } from './components/room-form/room-form';
 export const routes: Routes = [
     { path: 'rooms', component : RoomsComponent },
     { path: 'rooms/new', component: RoomFormComponent },
+    { path: 'rooms/edit/:id', component: RoomFormComponent },
     { path: 'rooms/:id', component : RoomDetailsComponent }
     
 ];
