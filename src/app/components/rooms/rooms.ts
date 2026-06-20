@@ -1,10 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { RoomService, Room } from '../../services/room.service';
+import { Component, inject } from '@angular/core';
+import { RoomService } from '../../services/room.service';
 import { AsyncPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-rooms',
-  imports: [AsyncPipe],
+  imports: [AsyncPipe, RouterLink],
   templateUrl: './rooms.html',
   styleUrl: './rooms.css',
 })
