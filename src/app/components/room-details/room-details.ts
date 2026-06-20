@@ -1,12 +1,12 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { RoomService } from '../../services/room.service';
 import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-room-details',
-  imports: [AsyncPipe],
+  imports: [AsyncPipe, RouterLink],
   templateUrl: './room-details.html',
   styleUrl: './room-details.css',
 })

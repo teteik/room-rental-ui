@@ -1,1 +1,25 @@
-<p>room-details works!</p>
+<div class="container">
+    <h2 class="mb-4">Детали комнаты</h2>
+
+    <a [routerLink]="['/rooms']" class="btn btn-outline-secondary btn-sm mb-3">   
+        Назад
+    </a>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="bg-secondary d-flex align-items-center justify-content-center" style="height: 300px;">
+                <span class="text-white"> Фото комнаты</span>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <p>Тест: данные загружаются...</p>
+            @if (room$ | async; as room) {
+                <div class="card-body">
+                    <h5 class="card-title">{{ room.name }}</h5>
+                    <p class="card-text">Вместимость: {{ room.capacity }} чел.</p>
+                    <p class="card-text">Цена за час: {{ room.pricePerHour }} руб.</p>
+                    <p class="card-text text-muted">{{ room.description }}</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -23,6 +23,6 @@ export class RoomService {
   }
 
   getRoomById(id: string): Observable<Room> {
-    return this.http.get<Room>('${this.apiUrl}/${id}')
+    return this.http.get<Room>(`${this.apiUrl}/${id}`)
   }
 }

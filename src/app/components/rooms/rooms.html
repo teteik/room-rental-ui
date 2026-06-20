@@ -1,18 +1,20 @@
-<h2 class="mb-4">Список комнат</h2>
+<div class="container">
+    <h2 class="mb-4">Список комнат</h2>
 
-<div class="row">
-  @for (room of rooms$ | async; track room.id) {
-    <div class="col-md-6 col-lg-4 mb-4">
-      <a [routerLink]="['/rooms', room.id]" class="text-decoration-none">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">{{ room.name }}</h5>
-            <p class="card-text">Вместимость: {{ room.capacity }} чел.</p>
-            <p class="card-text">Цена за час: {{ room.pricePerHour }} руб.</p>
-            <p class="card-text text-muted">{{ room.description }}</p>
-          </div>
+    <div class="row">
+    @for (room of rooms$ | async; track room.id) {
+        <div class="col-md-6 col-lg-4 mb-4">
+        <a [routerLink]="['/rooms', room.id]" class="text-decoration-none">
+            <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ room.name }}</h5>
+                <p class="card-text">Вместимость: {{ room.capacity }} чел.</p>
+                <p class="card-text">Цена за час: {{ room.pricePerHour }} руб.</p>
+                <p class="card-text text-muted">{{ room.description }}</p>
+            </div>
+            </div>
+        </a>
         </div>
-      </a>
+    }
     </div>
-  }
 </div>
