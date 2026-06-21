@@ -1,9 +1,50 @@
 <div class="container mt-4">
-    <h2>Зарезервировать комнату</h2>
-    @if (room$ | async; as room)
-    {
+  <h2>Зарезервировать комнату</h2>
+
+  @if (room$ | async; as room) {
         <a [routerLink]="['/rooms', room.id]" class="btn btn-outline-secondary btn-sm mb-3">
             Назад
         </a>
+    }
+
+  @if (room$ | async; as room) {
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">{{ room.name }}</h5>
+        <p class="card-text">Вместимость: {{ room.capacity }} чел.</p>
+        <p class="card-text">Цена за час: {{ room.pricePerHour }} руб.</p>
+      </div>
+    </div>
+
+    <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label for="startTime" class="form-label">Дата начала</label>
+        <input 
+          type="datetime-local" 
+          id="startDate" 
+          class="form-control" 
+          formControlName="startTime">
+      </div>
+
+      <div class="mb-3">
+        <label for="endTime" class="form-label">Дата окончания</label>
+        <input 
+          type="datetime-local" 
+          id="endTime" 
+          class="form-control" 
+          formControlName="endTime">
+      </div>
+
+      <button 
+        type="submit" 
+        class="btn btn-primary" 
+        [disabled]="bookingForm.invalid">
+        Забронировать
+      </button>
+    </form>
+  }
+
+  @if (bookingForm.hasError('invalidDates') && bookingForm.get('endTime')?.touched) {
+    <div class="text-danger">Дата окончания должна быть позже даты начала</div>
     }
 </div>

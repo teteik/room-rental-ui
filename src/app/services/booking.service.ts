@@ -6,9 +6,9 @@ export interface Booking {
   id: string;
   roomId: string;
   clientId: string;
-  startTime: Date;
-  endTime: Date;
-  price: string;
+  startTime: string;
+  endTime: string;
+  price: number;
   status: string;
 }
 

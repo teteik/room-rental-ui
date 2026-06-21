@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { RoomService } from '../../services/room.service';
 import { switchMap } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
+import { BookingService } from '../../services/booking.service';
 
 @Component({
   selector: 'app-booking-form',
@@ -13,13 +14,55 @@ import { HttpParams } from '@angular/common/http';
   styleUrl: './booking-form.css',
 })
 export class BookingFormComponent {
+  private fb = inject(FormBuilder);
   private roomService = inject(RoomService);
   private route = inject(ActivatedRoute);
+  private bookingService = inject(BookingService);
+  private router = inject(Router);
+
+  roomId: string | undefined = undefined;
+  clientId: string | undefined = 'ee535a6f-e199-4fec-8efa-662bd3f6f42a';
 
   room$ = this.route.queryParamMap.pipe(
     switchMap(params => {
-      const id = params.get('roomId')!;
-      return this.roomService.getRoomById(id);
+      this.roomId = params.get('roomId')!;
+      return this.roomService.getRoomById(this.roomId);
     })
-  )
+  );
+
+  bookingForm: FormGroup = this.fb.group({
+    startTime: ['', Validators.required],
+    endTime: ['', Validators.required]
+  }, { validators: this.datesValidator });
+
+  private datesValidator(form: FormGroup) {
+    const start = form.get('startTime')?.value;
+    const end = form.get('endTime')?.value;
+    if (start && end && new Date(start) >= new Date(end)) {
+      return { invalidDates: true };
+    }
+    return null;
+  }
+
+  onSubmit(): void {
+    if(this.bookingForm.valid) {
+      const formValue = this.bookingForm.value;
+      
+      const bookingData = {
+        clientId: this.clientId,
+        roomId: this.roomId,
+        startTime: new Date(formValue.startTime).toISOString(),
+        endTime: new Date(formValue.endTime).toISOString(),
+      };
+      this.bookingService.createBooking(bookingData).subscribe({
+        next: () => {
+          this.router.navigate(['/rooms', this.roomId]);
+        },
+        error: (err) => {
+          console.error('Error creating booking:', err);
+          alert('Не удалось создать бронирование');
+        }
+      })
+    }
+  }
 }
