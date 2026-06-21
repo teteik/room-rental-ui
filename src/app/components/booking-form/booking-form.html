@@ -1,1 +1,9 @@
-<p>booking-form works!</p>
+<div class="container mt-4">
+    <h2>Зарезервировать комнату</h2>
+    @if (room$ | async; as room)
+    {
+        <a [routerLink]="['/rooms', room.id]" class="btn btn-outline-secondary btn-sm mb-3">
+            Назад
+        </a>
+    }
+</div>

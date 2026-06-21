@@ -18,7 +18,7 @@
                     <p class="card-text">Цена за час: {{ room.pricePerHour }} руб.</p>
                     <p class="card-text text-muted">{{ room.description }}</p>
                 </div>
-                <a [routerLink]="['/bookings/new']" class="btn btn-primary mb-3">   
+                <a [routerLink]="['/bookings/new']" [queryParams]="{roomId: room.id}" class="btn btn-primary mb-3">   
                     Забронировать
                 </a>
                 <a [routerLink]="['/rooms/edit', room.id]" class="btn btn-warning mb-3 ms-2">   
