@@ -6,21 +6,20 @@
       <div class="col-md-6 col-lg-4 mb-4">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Бронирование #{{ booking.id | slice:0:8 }}</h5>
+            <h5 class="card-title">
+                <a [routerLink]="['/rooms', booking.roomId]">{{ booking.roomName }}</a>
+            </h5>
             <p class="card-text">
-              <strong>Комната:</strong> {{ booking.roomId | slice:0:8 }}...
+                <strong>Начало:</strong> {{ booking.startTime | date:'dd.MM.yyyy HH:mm' }}
             </p>
             <p class="card-text">
-              <strong>Начало:</strong> {{ booking.startTime | date:'short' }}
-            </p>
-            <p class="card-text">
-              <strong>Конец:</strong> {{ booking.endTime | date:'short' }}
+                <strong>Конец:</strong> {{ booking.endTime | date:'dd.MM.yyyy HH:mm' }}
             </p>
             <p class="card-text">
               <strong>Цена:</strong> {{ booking.price }} руб.
             </p>
             <p class="card-text">
-              <strong>Статус:</strong>  {{ booking.status }}
+              <strong>Статус: </strong> 
               <span class="badge" [ngClass]="{
                 'bg-warning': booking.status === 'Pending',
                 'bg-success': booking.status === 'Confirmed',
