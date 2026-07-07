@@ -16,7 +16,7 @@ export interface Room {
 export class RoomService {
   private http = inject(HttpClient);
 
-  private apiUrl = 'http://localhost:5282/api/rooms';
+  private apiUrl = '/api/rooms';
 
   getRooms(): Observable<Room[]> {
     return this.http.get<Room[]>(this.apiUrl);

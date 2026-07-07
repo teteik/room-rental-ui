@@ -56,6 +56,10 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "buildTarget": "room-rental-ui:build",
+            "proxyConfig": "proxy.conf.json" 
+          },
           "configurations": {
             "production": {
               "buildTarget": "room-rental-ui:build:production"

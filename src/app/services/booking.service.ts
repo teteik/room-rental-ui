@@ -18,7 +18,7 @@ export interface Booking {
 export class BookingService {
   private http = inject(HttpClient);
 
-  private apiUrl = 'http://localhost:5282/api/bookings';
+  private apiUrl = '/api/bookings';
 
   createBooking(booking: Partial<Booking>): Observable<Booking> {
     return this.http.post<Booking>(this.apiUrl, booking);
