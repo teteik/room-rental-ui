@@ -1,1 +1,21 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+  background: linear-gradient(135deg, #32f73a 0%, #1fc1e2 100%);
+  min-height: 100vh;
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    border-width: 3px;
+    border-color: rgb(133, 133, 133);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-8px); /* Выезжает вверх на 8px */
+  background: rgba(255, 255, 255, 0.85); /* Становится менее прозрачной */
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7); /* Тень становится больше */
+  border-color: rgba(31, 193, 226, 0.5); /* Голубой контур (под твой градиент) */
+}

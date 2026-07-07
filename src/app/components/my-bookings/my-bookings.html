@@ -4,11 +4,10 @@
   <div class="row">
     @for (booking of bookings$ | async; track booking.id) {
       <div class="col-md-6 col-lg-4 mb-4">
+      <a [routerLink]="['/rooms', booking.roomId]" class="text-decoration-none">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">
-                <a [routerLink]="['/rooms', booking.roomId]">{{ booking.roomName }}</a>
-            </h5>
+            <h5 class="card-title"> {{ booking.roomName }}</h5>
             <p class="card-text">
                 <strong>Начало:</strong> {{ booking.startTime | date:'dd.MM.yyyy HH:mm' }}
             </p>
@@ -30,6 +29,7 @@
             </p>
           </div>
         </div>
+      </a>
       </div>
     }
   </div>
