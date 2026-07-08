@@ -10,6 +10,11 @@ export interface Room {
   description: string;
 }
 
+export interface BookedSlot {
+  startTime: string;
+  endTime: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -36,5 +41,9 @@ export class RoomService {
 
   updateRoom(id: string, room: Partial<Room>): Observable<Room> {
     return this.http.put<Room>(`${this.apiUrl}/${id}`, room);
+  }
+
+  getRoomSchedule(roomId: string, date: string) : Observable<BookedSlot[]> {
+    return this.http.get<BookedSlot[]>(`${this.apiUrl}/${roomId}/schedule?date=${date}`);
   }
 }

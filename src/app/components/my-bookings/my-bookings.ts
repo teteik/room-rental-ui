@@ -6,7 +6,7 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-my-bookings',
-  imports: [AsyncPipe, DatePipe, SlicePipe, NgClass, RouterLink],
+  imports: [AsyncPipe, DatePipe, NgClass, RouterLink],
   templateUrl: './my-bookings.html',
   styleUrl: './my-bookings.css',
 })
