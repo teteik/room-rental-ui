@@ -4,30 +4,109 @@
     <a [routerLink]="['/rooms']" class="btn btn-outline-secondary btn-sm mb-3">   
         Назад
     </a>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="bg-secondary d-flex align-items-center justify-content-center" style="height: 300px;">
-                <span class="text-white"> Фото комнаты</span>
+
+    @if (room$ | async; as room) {
+        <div class="row">
+            <div class="col-md-4">
+                <div class="bg-secondary d-flex align-items-center justify-content-center" style="height: 300px;">
+                    <span class="text-white"> Фото комнаты</span>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h3 class="card-title">{{ room.name }}</h3>
+                    <h5 class="card-text">Вместимость: {{ room.capacity }} чел.</h5>
+                    <h5 class="card-text">Цена за час: {{ room.pricePerHour }} руб.</h5>
+                    <h5 class="card-text text-muted">{{ room.description }}</h5> 
+                    <h5> </h5> 
+                    <a [routerLink]="['/rooms/edit', room.id]" class="btn btn-warning mb-3 ms-2">   
+                        Редактировать
+                    </a>
+                    <button (click)="deleteRoom()" class="btn btn-danger mb-3 ms-2">   
+                        Удалить комнату
+                    </button>
+                </div>
+
+                <div class="card mt-4 p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="mb-0">Расписание на неделю</h5>
+                        <div>
+                            <button class="btn btn-sm btn-outline-secondary" (click)="goToPrevWeek()">← Пред.</button>
+                            <button class="btn btn-sm btn-outline-secondary ms-1" (click)="goToNextWeek()">След. →</button>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info py-2">
+                        <small>
+                            <strong>Как бронировать:</strong> Кликните на слот для выбора начала, затем на другой слот для выбора конца. Все слоты между ними выделятся автоматически.
+                        </small>
+                    </div>
+
+                    @if (weekSchedule$ | async; as weekDays) {
+                        <div class="week-grid">
+                            <div class="d-flex flex-nowrap overflow-auto pb-2" style="gap: 8px;">
+                                @for (day of weekDays; track day.date) {
+                                    <div class="day-column" style="min-width: 120px; flex: 1;">
+                                        <div class="day-header text-center p-2 rounded-top">
+                                            <div class="fw-bold">{{ day.dayOfWeek }}</div>
+                                            <div class="small">{{ day.dayOfMonth }}</div>
+                                        </div>
+                                        <div class="day-slots p-2 rounded-bottom">
+                                            @for (slot of day.slots; track slot.hour) {
+                                                <div 
+                                                    class="time-slot p-1 text-center rounded mb-1"
+                                                    [class.booked]="slot.isBooked"
+                                                    [class.selected-start]="slot === selectedStartSlot"
+                                                    [class.selected-end]="slot === selectedEndSlot"
+                                                    [class.in-range]="isSlotInRange(slot) && slot !== selectedStartSlot && slot !== selectedEndSlot"
+                                                    [class.available]="!slot.isBooked && !isSlotInRange(slot)"
+                                                    (click)="selectSlot(slot)"
+                                                    [style.cursor]="slot.isBooked ? 'not-allowed' : 'pointer'">
+                                                    <div class="small fw-bold">{{ slot.hour }}:00-{{ slot.hour + 1 }}:00 </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        @if (selectedStartSlot) {
+                            <div class="card bg-light p-3 mt-3">
+                                <div class="row align-items-center">
+                                    <div class="col-md-8">
+                                        @if (!selectedEndSlot) {
+                                            <p class="mb-0">
+                                                <strong>Начало:</strong> {{ selectedStartSlot.date }} {{ selectedStartSlot.hour }}:00
+                                                <span class="text-muted ms-2">(выберите конец)</span>
+                                            </p>
+                                        } @else {
+                                            <p class="mb-0">
+                                                <strong>Выбрано:</strong> {{ selectedStartSlot.date }} {{ selectedStartSlot.hour }}:00 
+                                                → {{ selectedEndSlot.date }} {{ selectedEndSlot.hour + 1 }}:00
+                                            </p>
+                                        }
+                                    </div>
+                                    <div class="col-md-4 text-end">
+                                        @if (selectedEndSlot) {
+                                            <button 
+                                                class="btn btn-success me-2"
+                                                (click)="bookSelectedRange(room.id)">
+                                                Забронировать
+                                            </button>
+                                        }
+                                        <button 
+                                            class="btn btn-secondary"
+                                            (click)="resetSelection()">
+                                            Сбросить
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
             </div>
         </div>
-        <div class="col-md-8">
-            @if (room$ | async; as room) {
-                <div class="card-body">
-                    <h5 class="card-title">{{ room.name }}</h5>
-                    <p class="card-text">Вместимость: {{ room.capacity }} чел.</p>
-                    <p class="card-text">Цена за час: {{ room.pricePerHour }} руб.</p>
-                    <p class="card-text text-muted">{{ room.description }}</p>
-                </div>
-                <a [routerLink]="['/bookings/new']" [queryParams]="{roomId: room.id}" class="btn btn-primary mb-3">   
-                    Забронировать
-                </a>
-                <a [routerLink]="['/rooms/edit', room.id]" class="btn btn-warning mb-3 ms-2">   
-                    Редактировать
-                </a>
-                <button (click)="deleteRoom()" class="btn btn-danger mb-3 ms-2">   
-                    Удалить комнату
-                </button>
-            }
-        </div>
-    </div>
+    }
 </div>
