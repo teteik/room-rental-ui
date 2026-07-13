@@ -1,12 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule], 
+  imports: [ReactiveFormsModule, RouterLink], 
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -27,8 +27,12 @@ export class LoginComponent {
 
     this.authService.login(email!, password!).subscribe({
       next: (response) => {
-        localStorage.setItem('token', response.token);
-        this.router.navigate(['/rooms']);
+        this.authService.saveUserData(response);
+        
+        const redirectUrl = sessionStorage.getItem('redirectAfterLogin');
+        sessionStorage.removeItem('redirectAfterLogin');
+        
+        this.router.navigateByUrl(redirectUrl || '/rooms');
       },
       error: (err) => {
         console.error('Ошибка входа:', err);

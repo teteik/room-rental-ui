@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
@@ -27,7 +27,7 @@ export class RegisterComponent {
 
     this.authService.register(email!, password!, fullName!).subscribe({
       next:(response) => {
-        localStorage.setItem('token', response.token);
+        this.authService.saveUserData(response);
         this.router.navigate(['/rooms']);
       },
       error:(err) => {
