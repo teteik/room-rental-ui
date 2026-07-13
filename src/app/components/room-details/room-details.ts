@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { RoomService, BookedSlot } from '../../services/room.service';
 import { BookingService } from '../../services/booking.service';
 import { Observable, combineLatest, map, switchMap, forkJoin, BehaviorSubject } from 'rxjs';
+import { AuthService } from '../../services/auth.service';
 
 export interface TimeSlot {
   date: string;
@@ -31,6 +32,7 @@ export class RoomDetailsComponent {
   private router = inject(Router);
   private roomService = inject(RoomService);
   private bookingService = inject(BookingService);
+  private authService = inject(AuthService);
 
   weekStart$ = new BehaviorSubject<Date>(this.getMonday(new Date()));
   
@@ -226,5 +228,14 @@ export class RoomDetailsComponent {
         }
       });
     }
+  }
+
+  onBookClick(roomId: string): void {
+    if (!this.authService.isAuthenticated()) {
+      sessionStorage.setItem('redirectAfterLogin', `/bookings/new?roomId=${roomId}`);
+      this.router.navigate(['/login']);
+      return;
+    }
+    this.router.navigate(['/bookings/new'], { queryParams: { roomId } });
   }
 }

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -18,6 +18,18 @@ export class AuthService {
   private apiUrl = '/api/auth'
   private router = inject(Router);
 
+  currentUserSignal = signal<{ email: string; fullName?: string } | null>(null);
+
+  constructor() {
+    const user = this.getCurrentUser();
+    if (user) {
+      this.currentUserSignal.set({ 
+        email: user.email, 
+        fullName: user.fullName 
+      });
+    }
+  }
+
   login(email: string, password: string): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, {email, password});
   }
@@ -26,8 +38,19 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`, {email, password, fullName})
   }
 
+  saveUserData(response: AuthResponse): void {
+    localStorage.setItem('token', response.token);
+    localStorage.setItem('user', JSON.stringify({
+      email: response.email,
+      fullName: response.fullName,
+      roles: response.roles,
+    }));
+    this.currentUserSignal.set({ email: response.email, fullName: response.fullName });
+  }
+
   logout(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     this.router.navigate([`/login`]);
   }
 
@@ -37,5 +60,10 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     return this.getToken() !== null;
+  }
+
+  getCurrentUser(): { email: string, fullName?: string, roles?: string[]} | null {
+    const userStr = localStorage.getItem('user');
+    return userStr ? JSON.parse(userStr) : null;
   }
 }

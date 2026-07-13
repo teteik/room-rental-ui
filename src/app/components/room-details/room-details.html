@@ -91,8 +91,8 @@
                                     <div class="col-md-4 text-end">
                                         @if (selectedEndSlot) {
                                             <button 
-                                                class="btn btn-success me-2"
-                                                (click)="bookSelectedRange(room.id)">
+                                                class="btn btn-primary w-100" 
+                                                (click)="onBookClick(room.id)">
                                                 Забронировать
                                             </button>
                                         }
