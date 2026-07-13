@@ -8,6 +8,7 @@ export interface AuthResponse {
   email: string;
   fullName?: string;
   roles: string[];
+  userId: string;
 }
 
 @Injectable({
@@ -15,27 +16,32 @@ export interface AuthResponse {
 })
 export class AuthService {
   private http = inject(HttpClient);
-  private apiUrl = '/api/auth'
+  private apiUrl = '/api/auth';
   private router = inject(Router);
 
-  currentUserSignal = signal<{ email: string; fullName?: string } | null>(null);
+  currentUserSignal = signal<{
+    email: string;
+    fullName?: string;
+    userId: string;
+  } | null>(null);
 
   constructor() {
     const user = this.getCurrentUser();
     if (user) {
-      this.currentUserSignal.set({ 
-        email: user.email, 
-        fullName: user.fullName 
+      this.currentUserSignal.set({
+        email: user.email,
+        fullName: user.fullName,
+        userId: user.userId 
       });
     }
   }
 
   login(email: string, password: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, {email, password});
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, { email, password });
   }
 
   register(email: string, password: string, fullName: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, {email, password, fullName})
+    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, { email, password, fullName });
   }
 
   saveUserData(response: AuthResponse): void {
@@ -44,14 +50,20 @@ export class AuthService {
       email: response.email,
       fullName: response.fullName,
       roles: response.roles,
+      userId: response.userId
     }));
-    this.currentUserSignal.set({ email: response.email, fullName: response.fullName });
+    this.currentUserSignal.set({
+      email: response.email,
+      fullName: response.fullName,
+      userId: response.userId
+    });
   }
 
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    this.router.navigate([`/login`]);
+    this.currentUserSignal.set(null); 
+    this.router.navigate(['/login']);
   }
 
   getToken(): string | null {
@@ -62,7 +74,7 @@ export class AuthService {
     return this.getToken() !== null;
   }
 
-  getCurrentUser(): { email: string, fullName?: string, roles?: string[]} | null {
+  getCurrentUser(): { email: string; fullName?: string; userId: string } | null {
     const userStr = localStorage.getItem('user');
     return userStr ? JSON.parse(userStr) : null;
   }

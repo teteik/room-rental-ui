@@ -88,17 +88,14 @@
                                             </p>
                                         }
                                     </div>
-                                    <div class="col-md-4 text-end">
+                                    
+                                    <div class="col-md-4 text-end d-flex justify-content-end gap-2">
                                         @if (selectedEndSlot) {
-                                            <button 
-                                                class="btn btn-primary w-100" 
-                                                (click)="onBookClick(room.id)">
+                                            <button class="btn btn-primary flex-grow-1" (click)="confirmBooking(room.id)">
                                                 Забронировать
                                             </button>
                                         }
-                                        <button 
-                                            class="btn btn-secondary"
-                                            (click)="resetSelection()">
+                                        <button class="btn btn-secondary" (click)="resetSelection()">
                                             Сбросить
                                         </button>
                                     </div>

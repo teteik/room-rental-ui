@@ -230,12 +230,42 @@ export class RoomDetailsComponent {
     }
   }
 
-  onBookClick(roomId: string): void {
-    if (!this.authService.isAuthenticated()) {
-      sessionStorage.setItem('redirectAfterLogin', `/bookings/new?roomId=${roomId}`);
+  confirmBooking(roomId: string): void {
+    if (!this.selectedStartSlot || !this.selectedEndSlot) return;
+
+    const user = this.authService.getCurrentUser();
+    if (!user) {
+      sessionStorage.setItem('redirectAfterLogin', window.location.href);
       this.router.navigate(['/login']);
       return;
     }
-    this.router.navigate(['/bookings/new'], { queryParams: { roomId } });
+
+    if (this.selectedStartSlot.startTime === this.selectedEndSlot.endTime) {
+      alert('Выберите разные слоты для начала и конца бронирования');
+      return;
+    }
+
+    const bookingData = {
+      clientId: user.userId, 
+      roomId,
+      startTime: this.selectedStartSlot.startTime,
+      endTime: this.selectedEndSlot.endTime,
+    };
+
+    this.bookingService.createBooking(bookingData).subscribe({
+      next: () => {
+        const hours = Math.round(
+          (new Date(this.selectedEndSlot!.endTime).getTime() - 
+           new Date(this.selectedStartSlot!.startTime).getTime()) / 3600000
+        );
+        alert(`Бронирование успешно создано на ${hours} ч.!`);
+        this.resetSelection();
+        this.weekStart$.next(new Date(this.weekStart$.value));
+      },
+      error: (err) => {
+        console.error('Error creating booking:', err);
+        alert(err.error || 'Не удалось создать бронирование');
+      }
+    });
   }
 }
