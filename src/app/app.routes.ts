@@ -5,6 +5,7 @@ import { RoomFormComponent } from './components/room-form/room-form';
 import { BookingFormComponent } from './components/booking-form/booking-form';
 import { MyBookingsComponent } from './components/my-bookings/my-bookings';
 import { LoginComponent } from './components/login/login';
+import { RegisterComponent } from './components/register/register';
 
 export const routes: Routes = [
     { path: 'rooms', component : RoomsComponent },
@@ -13,5 +14,6 @@ export const routes: Routes = [
     { path: 'rooms/:id', component: RoomDetailsComponent },
     { path: 'bookings/new', component:BookingFormComponent },
     { path: 'my-bookings', component:MyBookingsComponent },
-    { path: 'login', component:LoginComponent }
+    { path: 'login', component:LoginComponent },
+    { path: 'register', component:RegisterComponent}
 ];
