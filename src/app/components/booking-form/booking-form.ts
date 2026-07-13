@@ -6,6 +6,7 @@ import { switchMap } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { BookingService } from '../../services/booking.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-booking-form',
@@ -19,10 +20,10 @@ export class BookingFormComponent {
   private route = inject(ActivatedRoute);
   private bookingService = inject(BookingService);
   private router = inject(Router);
+  private authService = inject(AuthService)
 
   roomId: string | undefined = undefined;
-  clientId: string | undefined = 'ee535a6f-e199-4fec-8efa-662bd3f6f42a';
-
+ 
   room$ = this.route.queryParamMap.pipe(
     switchMap(params => {
       this.roomId = params.get('roomId')!;
@@ -48,12 +49,19 @@ export class BookingFormComponent {
     if(this.bookingForm.valid) {
       const formValue = this.bookingForm.value;
       
+      const currentUser = this.authService.getCurrentUser();
+      if (!currentUser) {
+        this.router.navigate(['/login']);
+        return;
+      }
+
       const bookingData = {
-        clientId: this.clientId,
+        clientId: currentUser.email,
         roomId: this.roomId,
         startTime: new Date(formValue.startTime).toISOString(),
         endTime: new Date(formValue.endTime).toISOString(),
       };
+
       this.bookingService.createBooking(bookingData).subscribe({
         next: () => {
           this.router.navigate(['/rooms', this.roomId]);

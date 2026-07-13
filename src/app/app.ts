@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -8,5 +9,12 @@ import { RouterLink, RouterOutlet } from '@angular/router';
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('room-rental-ui');
+  protected readonly title = 'room-rental-ui';
+  private authService = inject(AuthService);
+  
+  currentUserSignal = this.authService.currentUserSignal;
+
+  logout(): void {
+    this.authService.logout();
+  }
 }

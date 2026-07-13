@@ -1,9 +1,27 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
     <a class="navbar-brand" href="#">Room Rental</a>
+    
     <div class="navbar-nav">
+      @if (currentUserSignal()) {
+        <span class="navbar-text text-white me-3">
+          Привет, {{ currentUserSignal()?.fullName || currentUserSignal()?.email }}!
+        </span>
+      }
+      
       <a class="nav-link" [routerLink]="['/rooms']">Комнаты</a>
       <a class="nav-link" [routerLink]="['/my-bookings']">Мои бронирования</a>
+    </div>
+
+    <div>
+      @if (currentUserSignal()) {
+        <button class="btn btn-outline-light btn-sm" (click)="logout()">
+          Выйти
+        </button>
+      } @else {
+        <a class="btn btn-outline-light btn-sm me-2" [routerLink]="['/login']">Войти</a>
+        <a class="btn btn-outline-light btn-sm" [routerLink]="['/register']">Регистрация</a>
+      }
     </div>
   </div>
 </nav>
