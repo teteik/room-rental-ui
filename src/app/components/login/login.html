@@ -1,0 +1,33 @@
+<div class="container mt-5" style="max-width: 400px;">
+  <h2 class="text-center mb-4">Вход в систему</h2>
+  
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    
+    <div class="mb-3">
+      <label for="email" class="form-label">Email:</label>
+      <input 
+        type="email" 
+        id="email" 
+        class="form-control" 
+        formControlName="email"
+        placeholder="example@mail.com">
+    </div>
+
+    <div class="mb-3">
+      <label for="password" class="form-label">Пароль:</label>
+      <input 
+        type="password" 
+        id="password" 
+        class="form-control" 
+        formControlName="password"
+        placeholder="Введите пароль">
+    </div>
+
+    <button 
+      type="submit" 
+      class="btn btn-primary w-100" 
+      [disabled]="loginForm.invalid">
+      Войти
+    </button>
+  </form>
+</div>
