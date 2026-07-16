@@ -2,12 +2,12 @@ import { Component, inject, OnInit } from '@angular/core';
 import { AsyncPipe, DatePipe, NgClass, SlicePipe } from '@angular/common';
 import { Booking, BookingService } from '../../services/booking.service';
 import { AuthService } from '../../services/auth.service';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-admin-bookings',
-  imports: [AsyncPipe, DatePipe, SlicePipe],
+  imports: [AsyncPipe, DatePipe, SlicePipe, RouterLink, RouterLinkActive],
   templateUrl: './admin-bookings.html',
   styleUrl: './admin-bookings.css',
 })
