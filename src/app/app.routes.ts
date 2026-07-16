@@ -7,6 +7,7 @@ import { MyBookingsComponent } from './components/my-bookings/my-bookings';
 import { LoginComponent } from './components/login/login';
 import { RegisterComponent } from './components/register/register';
 import { authGuard } from './guards/auth.guard';
+import { AdminBookingsComponent } from './components/admin-bookings/admin-bookings';
 
 export const routes: Routes = [
     { path: 'rooms', component : RoomsComponent },
@@ -16,5 +17,6 @@ export const routes: Routes = [
     { path: 'bookings/new', component:BookingFormComponent, canActivate: [authGuard] },
     { path: 'my-bookings', component:MyBookingsComponent, canActivate: [authGuard] },
     { path: 'login', component:LoginComponent },
-    { path: 'register', component:RegisterComponent}
+    { path: 'register', component:RegisterComponent},
+    { path: 'admin/bookings', component:AdminBookingsComponent }
 ];
