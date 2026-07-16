@@ -32,7 +32,7 @@ export class RoomDetailsComponent {
   private router = inject(Router);
   private roomService = inject(RoomService);
   private bookingService = inject(BookingService);
-  private authService = inject(AuthService);
+  public authService = inject(AuthService);
 
   weekStart$ = new BehaviorSubject<Date>(this.getMonday(new Date()));
   

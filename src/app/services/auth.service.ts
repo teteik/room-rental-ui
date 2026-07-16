@@ -74,8 +74,13 @@ export class AuthService {
     return this.getToken() !== null;
   }
 
-  getCurrentUser(): { email: string; fullName?: string; userId: string } | null {
+  getCurrentUser(): { email: string; fullName?: string; userId: string; roles: string[] } | null {
     const userStr = localStorage.getItem('user');
     return userStr ? JSON.parse(userStr) : null;
+  }
+
+  isAdmin(): boolean {
+    const user = this.getCurrentUser();
+    return user?.roles?.includes('Admin') ?? false;
   }
 }

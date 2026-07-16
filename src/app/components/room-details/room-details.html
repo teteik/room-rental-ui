@@ -20,12 +20,15 @@
                     <h5 class="card-text">Цена за час: {{ room.pricePerHour }} руб.</h5>
                     <h5 class="card-text text-muted">{{ room.description }}</h5> 
                     <h5> </h5> 
-                    <a [routerLink]="['/rooms/edit', room.id]" class="btn btn-warning mb-3 ms-2">   
-                        Редактировать
-                    </a>
-                    <button (click)="deleteRoom()" class="btn btn-danger mb-3 ms-2">   
-                        Удалить комнату
-                    </button>
+                    @if (authService.isAdmin())
+                    { 
+                        <a [routerLink]="['/rooms/edit', room.id]" class="btn btn-warning mb-3 ms-2">   
+                            Редактировать
+                        </a>
+                        <button (click)="deleteRoom()" class="btn btn-danger mb-3 ms-2">   
+                            Удалить комнату
+                        </button>
+                    }
                 </div>
 
                 <div class="card mt-4 p-3">

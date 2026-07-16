@@ -28,4 +28,12 @@ export class BookingService {
     const params = new HttpParams().set('clientId', userId);
     return this.http.get<Booking[]>(this.apiUrl, { params });
   }
+
+  getAllBookings(): Observable<Booking[]> {
+    return this.http.get<Booking[]>(this.apiUrl);
+  }
+
+  updateBookingStatus(id: string, action: 'confirm' | 'cancel'): Observable<Booking> {
+    return this.http.post<Booking>(`${this.apiUrl}/${id}/${action}`, {});
+  }
 }
