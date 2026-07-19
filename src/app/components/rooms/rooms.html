@@ -8,16 +8,27 @@
     <div class="row">
     @for (room of rooms$ | async; track room.id) {
         <div class="col-md-6 col-lg-4 mb-4">
-        <a [routerLink]="['/rooms', room.id]" class="text-decoration-none">
-            <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">{{ room.name }}</h5>
-                <p class="card-text">Вместимость: {{ room.capacity }} чел.</p>
-                <p class="card-text">Цена за час: {{ room.pricePerHour }} руб.</p>
-                <p class="card-text text-muted">{{ room.description }}</p>
-            </div>
-            </div>
-        </a>
+            <a [routerLink]="['/rooms', room.id]" class="text-decoration-none">
+                <div class="card h-100">
+                    @if (room.images && room.images.length > 0) {
+                        <img [src]="room.images[0].imageUrl"
+                            [alt]="room.name" 
+                            class="card-img-top" 
+                            style="height: 200px; object-fit: cover;">
+                    } @else {
+                        <div class="bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <span class="text-white">Нет фото</span>
+                        </div>
+                    }
+                    
+                    <div class="card-body">
+                        <h5 class="card-title">{{ room.name }}</h5>
+                        <p class="card-text">Вместимость: {{ room.capacity }} чел.</p>
+                        <p class="card-text">Цена за час: {{ room.pricePerHour }} руб.</p>
+                        <p class="card-text text-muted">{{ room.description }}</p>
+                    </div>
+                </div>
+            </a>
         </div>
     }
     </div>

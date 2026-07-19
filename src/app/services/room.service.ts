@@ -2,12 +2,18 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+export interface RoomImage {
+  id: string;
+  imageUrl: string;
+}
+
 export interface Room {
   id: string;
   name: string;
   capacity: number;
   pricePerHour: number;
   description: string;
+  images: RoomImage[];
 }
 
 export interface BookedSlot {
@@ -45,5 +51,15 @@ export class RoomService {
 
   getRoomSchedule(roomId: string, date: string) : Observable<BookedSlot[]> {
     return this.http.get<BookedSlot[]>(`${this.apiUrl}/${roomId}/schedule?date=${date}`);
+  }
+
+  uploadRoomImage(roomId: string, file: File): Observable<Room> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<Room>(`${ this.apiUrl}/${roomId}/images`, formData);
+  }
+
+  deleteRoomImage(roomId: string, imageId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${roomId}/images/${imageId}`);
   }
 }
