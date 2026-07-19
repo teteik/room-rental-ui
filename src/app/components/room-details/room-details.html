@@ -8,10 +8,46 @@
     @if (room$ | async; as room) {
         <div class="row">
             <div class="col-md-4">
-                <div class="bg-secondary d-flex align-items-center justify-content-center" style="height: 300px;">
-                    <span class="text-white"> Фото комнаты</span>
-                </div>
+                @if (room.images && room.images.length > 0) {
+                    <div class="d-flex flex-column gap-2">
+                        @for (img of room.images; track img.id) {
+                            <div class="position-relative">
+                                <img [src]="img.imageUrl"
+                                    class="img-thumbnail" 
+                                    style="width: 100%; max-height: 250px; object-fit: cover;">
+                                
+                                @if (authService.isAdmin()) {
+                                    <button class="btn btn-sm btn-danger position-absolute" 
+                                            style="top: 8px; right: 8px;"
+                                            (click)="deleteImage(room.id, img.id); $event.stopPropagation()">
+                                        ✕
+                                    </button>
+                                }
+                            </div>
+                        }
+                    </div>
+                } @else {
+                    <div class="bg-secondary d-flex align-items-center justify-content-center" style="height: 300px;">
+                        <span class="text-white">Нет фото</span>
+                    </div>
+                }
+
+                @if (authService.isAdmin()) {
+                    <div class="mt-3">
+                        <label class="form-label fw-bold">Загрузить фото:</label>
+                        <input type="file" 
+                            class="form-control" 
+                            accept="image/jpeg,image/png,image/webp" 
+                            (change)="onFileSelected($event)">
+                        <button class="btn btn-primary mt-2 w-100" 
+                                [disabled]="!selectedFile" 
+                                (click)="uploadImage(room.id)">
+                            Загрузить
+                        </button>
+                    </div>
+                }
             </div>
+
             <div class="col-md-8">
                 <div class="card-body">
                     <h3 class="card-title">{{ room.name }}</h3>

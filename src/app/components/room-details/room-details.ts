@@ -1,4 +1,4 @@
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, JsonPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { RoomService, BookedSlot } from '../../services/room.service';
@@ -23,7 +23,7 @@ export interface DaySchedule {
 
 @Component({
   selector: 'app-room-details',
-  imports: [AsyncPipe, RouterLink],
+  imports: [AsyncPipe, RouterLink, JsonPipe],
   templateUrl: './room-details.html',
   styleUrl: './room-details.css',
 })
@@ -38,6 +38,48 @@ export class RoomDetailsComponent {
   
   selectedStartSlot: TimeSlot | null = null;
   selectedEndSlot: TimeSlot | null = null;
+  selectedFile: File | null = null;
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+    }
+  }
+
+  uploadImage(roomId: string): void {
+    if (!this.selectedFile) return;
+
+    this.roomService.uploadRoomImage(roomId, this.selectedFile).subscribe({
+      next: () => {
+        alert('Фото загружено!');
+        this.selectedFile = null;
+        this.reloadRoom();
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Не удалось загрузить фото');
+      }
+    });
+  }
+
+  deleteImage(roomId: string, imageId: string): void {
+    if (!confirm('Удалить это фото?')) return;
+
+    this.roomService.deleteRoomImage(roomId, imageId).subscribe({
+      next: () => this.reloadRoom(),
+      error: (err) => {
+        console.error(err);
+        alert('Не удалось удалить фото');
+      }
+    });
+  }
+
+  private reloadRoom(): void {
+    this.room$ = this.route.paramMap.pipe(
+      switchMap(params => this.roomService.getRoomById(params.get('id')!))
+    );
+  }
 
   room$: Observable<any> = this.route.paramMap.pipe(
     map(params => params.get('id')!),
