@@ -43,7 +43,8 @@ export class RoomDetailsComponent implements OnInit, OnDestroy {
   selectedStartSlot: TimeSlot | null = null;
   selectedEndSlot: TimeSlot | null = null;
   selectedFiles: File[] = [];
-  
+  activeImageUrl: string | null = null;
+
   private destroy$ = new Subject<void>();
 
   ngOnInit(): void {
@@ -338,5 +339,13 @@ export class RoomDetailsComponent implements OnInit, OnDestroy {
         alert(err.error || 'Не удалось создать бронирование');
       }
     });
+  }
+
+  openLightbox(url: string): void {
+    this.activeImageUrl = url;
+  }
+
+  closeLightBox(): void {
+    this.activeImageUrl = null;
   }
 }

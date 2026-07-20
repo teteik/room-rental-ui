@@ -14,7 +14,8 @@
                             <div class="position-relative">
                                 <img [src]="img.imageUrl"
                                     class="img-thumbnail" 
-                                    style="width: 100%; max-height: 250px; object-fit: cover;">
+                                    style="width: 100%; max-height: 250px; object-fit: cover; cursor: zoom-in;"
+                                    (click)="openLightbox(img.imageUrl)">
                                 
                                 @if (authService.isAdmin()) {
                                     <button class="btn btn-sm btn-danger position-absolute" 
@@ -147,3 +148,19 @@
         </div>
     }
 </div>
+
+@if (activeImageUrl) {
+    <div class="lightbox-overlay" (click)="closeLightBox()">
+        
+        <button class="btn btn-light btn-sm position-absolute" 
+                style="top: 20px; right: 20px; z-index: 10001; border-radius: 50%; width: 40px; height: 40px;"
+                (click)="closeLightBox(); $event.stopPropagation()">
+            ✕
+        </button>
+
+        <img [src]="activeImageUrl" 
+             class="lightbox-image" 
+             (click)="$event.stopPropagation()"
+             alt="Увеличенное фото">
+    </div>
+}
