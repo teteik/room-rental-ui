@@ -1,9 +1,9 @@
-import { AsyncPipe, JsonPipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { RoomService, BookedSlot } from '../../services/room.service';
+import { AsyncPipe, JsonPipe } from '@angular/common';
+import { RoomService, BookedSlot, Room, RoomImage } from '../../services/room.service';
 import { BookingService } from '../../services/booking.service';
-import { Observable, combineLatest, map, switchMap, forkJoin, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, combineLatest, forkJoin, map, switchMap, takeUntil } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 
 export interface TimeSlot {
@@ -23,22 +23,44 @@ export interface DaySchedule {
 
 @Component({
   selector: 'app-room-details',
-  imports: [AsyncPipe, RouterLink, JsonPipe],
+  standalone: true,
+  imports: [AsyncPipe, RouterLink],
   templateUrl: './room-details.html',
   styleUrl: './room-details.css',
 })
-export class RoomDetailsComponent {
+export class RoomDetailsComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private roomService = inject(RoomService);
   private bookingService = inject(BookingService);
   public authService = inject(AuthService);
 
+  private roomSubject = new BehaviorSubject<Room | null>(null);
+  room$ = this.roomSubject.asObservable();
+
   weekStart$ = new BehaviorSubject<Date>(this.getMonday(new Date()));
   
   selectedStartSlot: TimeSlot | null = null;
   selectedEndSlot: TimeSlot | null = null;
   selectedFile: File | null = null;
+  
+  private destroy$ = new Subject<void>();
+
+  ngOnInit(): void {
+    this.route.paramMap.pipe(
+      map(params => params.get('id')!),
+      switchMap(id => this.roomService.getRoomById(id)),
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (room) => this.roomSubject.next(room),
+      error: (err) => console.error('Failed to load room:', err)
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -51,10 +73,9 @@ export class RoomDetailsComponent {
     if (!this.selectedFile) return;
 
     this.roomService.uploadRoomImage(roomId, this.selectedFile).subscribe({
-      next: () => {
-        alert('Фото загружено!');
+      next: (updatedRoom) => {
+        this.roomSubject.next(updatedRoom);
         this.selectedFile = null;
-        this.reloadRoom();
       },
       error: (err) => {
         console.error(err);
@@ -66,25 +87,48 @@ export class RoomDetailsComponent {
   deleteImage(roomId: string, imageId: string): void {
     if (!confirm('Удалить это фото?')) return;
 
+    const currentRoom = this.roomSubject.value;
+    if (currentRoom) {
+      this.roomSubject.next({
+        ...currentRoom,
+        images: currentRoom.images.filter(img => img.id !== imageId)
+      });
+    }
+
     this.roomService.deleteRoomImage(roomId, imageId).subscribe({
-      next: () => this.reloadRoom(),
+      next: () => {
+      },
       error: (err) => {
         console.error(err);
         alert('Не удалось удалить фото');
+        this.roomService.getRoomById(roomId).subscribe(room => 
+          this.roomSubject.next(room)
+        );
       }
     });
   }
 
+  deleteRoom(): void {
+    if (confirm('Вы уверены?')) {
+      this.route.paramMap.pipe(
+        map(params => params.get('id')!),
+        switchMap(id => this.roomService.deleteRoom(id))
+      ).subscribe({
+        next: () => this.router.navigate(['/rooms']),
+        error: (err) => {
+          console.error('Error deleting room:', err);
+          alert('Не удалось удалить комнату');
+        }
+      });
+    }
+  }
+
   private reloadRoom(): void {
+    console.log('reloadRoom вызван')
     this.room$ = this.route.paramMap.pipe(
       switchMap(params => this.roomService.getRoomById(params.get('id')!))
     );
   }
-
-  room$: Observable<any> = this.route.paramMap.pipe(
-    map(params => params.get('id')!),
-    switchMap(id => this.roomService.getRoomById(id))
-  );
 
   weekDates$: Observable<string[]> = this.weekStart$.pipe(
     map(start => this.getWeekDates(start))
@@ -255,21 +299,6 @@ export class RoomDetailsComponent {
         alert('Не удалось создать бронирование');
       }
     });
-  }
-
-  deleteRoom(): void {
-    if (confirm('Вы уверены?')) {
-      this.route.paramMap.pipe(
-        map(params => params.get('id')!),
-        switchMap(id => this.roomService.deleteRoom(id))
-      ).subscribe({
-        next: () => this.router.navigate(['/rooms']),
-        error: (err) => {
-          console.error('Error deleting room:', err);
-          alert('Не удалось удалить комнату');
-        }
-      });
-    }
   }
 
   confirmBooking(roomId: string): void {
