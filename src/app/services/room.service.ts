@@ -53,9 +53,11 @@ export class RoomService {
     return this.http.get<BookedSlot[]>(`${this.apiUrl}/${roomId}/schedule?date=${date}`);
   }
 
-  uploadRoomImage(roomId: string, file: File): Observable<Room> {
+  uploadRoomImages(roomId: string, files: File[]): Observable<Room> {
     const formData = new FormData();
-    formData.append('file', file);
+    files.forEach(file => {
+      formData.append('files', file);
+    });
     return this.http.post<Room>(`${ this.apiUrl}/${roomId}/images`, formData);
   }
 

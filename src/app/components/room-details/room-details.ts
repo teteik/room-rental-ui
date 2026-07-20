@@ -42,7 +42,7 @@ export class RoomDetailsComponent implements OnInit, OnDestroy {
   
   selectedStartSlot: TimeSlot | null = null;
   selectedEndSlot: TimeSlot | null = null;
-  selectedFile: File | null = null;
+  selectedFiles: File[] = [];
   
   private destroy$ = new Subject<void>();
 
@@ -65,17 +65,17 @@ export class RoomDetailsComponent implements OnInit, OnDestroy {
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
+      this.selectedFiles = Array.from(input.files);
     }
   }
 
   uploadImage(roomId: string): void {
-    if (!this.selectedFile) return;
+    if (this.selectedFiles.length <= 0) return;
 
-    this.roomService.uploadRoomImage(roomId, this.selectedFile).subscribe({
+    this.roomService.uploadRoomImages(roomId, this.selectedFiles).subscribe({
       next: (updatedRoom) => {
         this.roomSubject.next(updatedRoom);
-        this.selectedFile = null;
+        this.selectedFiles = [];
       },
       error: (err) => {
         console.error(err);
