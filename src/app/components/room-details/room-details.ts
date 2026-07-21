@@ -5,6 +5,7 @@ import { RoomService, BookedSlot, Room, RoomImage } from '../../services/room.se
 import { BookingService } from '../../services/booking.service';
 import { BehaviorSubject, Observable, Subject, combineLatest, forkJoin, map, switchMap, takeUntil } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
+import { ToastrService } from '../../services/toast.service';
 
 export interface TimeSlot {
   date: string;
@@ -34,6 +35,7 @@ export class RoomDetailsComponent implements OnInit, OnDestroy {
   private roomService = inject(RoomService);
   private bookingService = inject(BookingService);
   public authService = inject(AuthService);
+  private toastrService = inject(ToastrService);
 
   private roomSubject = new BehaviorSubject<Room | null>(null);
   room$ = this.roomSubject.asObservable();
@@ -77,10 +79,11 @@ export class RoomDetailsComponent implements OnInit, OnDestroy {
       next: (updatedRoom) => {
         this.roomSubject.next(updatedRoom);
         this.selectedFiles = [];
+        this.toastrService.showSuccess('Фото успешно загружены!');
       },
       error: (err) => {
         console.error(err);
-        alert('Не удалось загрузить фото');
+        this.toastrService.showError('Не удалось загрузить фото');
       }
     });
   }
@@ -98,10 +101,11 @@ export class RoomDetailsComponent implements OnInit, OnDestroy {
 
     this.roomService.deleteRoomImage(roomId, imageId).subscribe({
       next: () => {
+        this.toastrService.showSuccess('Фото успешно удалено!');
       },
       error: (err) => {
         console.error(err);
-        alert('Не удалось удалить фото');
+        this.toastrService.showError('Не удалось удалить фото');
         this.roomService.getRoomById(roomId).subscribe(room => 
           this.roomSubject.next(room)
         );
@@ -118,7 +122,7 @@ export class RoomDetailsComponent implements OnInit, OnDestroy {
         next: () => this.router.navigate(['/rooms']),
         error: (err) => {
           console.error('Error deleting room:', err);
-          alert('Не удалось удалить комнату');
+          this.toastrService.showError('Не удалось удалить комнату');
         }
       });
     }
@@ -291,13 +295,13 @@ export class RoomDetailsComponent implements OnInit, OnDestroy {
     this.bookingService.createBooking(bookingData).subscribe({
       next: () => {
         const hours = Math.round((new Date(this.selectedEndSlot!.endTime).getTime() - new Date(this.selectedStartSlot!.startTime).getTime()) / 3600000);
-        alert(`Бронирование успешно создано на ${hours} ч.!`);
+        this.toastrService.showSuccess(`Бронирование создано на ${hours} ч.!`);
         this.resetSelection();
         this.weekStart$.next(new Date(this.weekStart$.value));
       },
       error: (err) => {
         console.error('Error creating booking:', err);
-        alert('Не удалось создать бронирование');
+        this.toastrService.showError('Не удалось создать бронирование');
       }
     });
   }
@@ -313,7 +317,7 @@ export class RoomDetailsComponent implements OnInit, OnDestroy {
     }
 
     if (this.selectedStartSlot.startTime === this.selectedEndSlot.endTime) {
-      alert('Выберите разные слоты для начала и конца бронирования');
+      this.toastrService.showError('Выберите разные слоты для начала и конца');
       return;
     }
 

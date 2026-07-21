@@ -1,0 +1,10 @@
+<div class="toast-container">
+  @for (toast of toasts$ | async; track toast.id) {
+    <div class="toast" [class.toast-success]="toast.type === 'success'" 
+    [class.toast-error]="toast.type === 'error'"
+    [class.toast-leaving]="toast.isLeaving">
+      <div class="toast-message">{{ toast.message }}</div>
+      <button class="toast-close" (click)="closeToast(toast.id)">✕</button>
+    </div>
+  }
+</div>
