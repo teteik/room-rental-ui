@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface RoomImage {
@@ -29,8 +29,20 @@ export class RoomService {
 
   private apiUrl = '/api/rooms';
 
-  getRooms(): Observable<Room[]> {
-    return this.http.get<Room[]>(this.apiUrl);
+  getRooms(search?: string, minCapacity?: number, maxPrice?: number): Observable<Room[]> {
+    let params = new HttpParams();
+
+    if (search) {
+      params = params.set('search', search);
+    }
+    if (minCapacity !== null && minCapacity !== undefined) {
+      params = params.set('minCapacity', minCapacity.toString());
+    }
+    if (maxPrice !== null && maxPrice !== undefined) {
+      params = params.set('maxPrice', maxPrice.toString());
+    }
+
+    return this.http.get<Room[]>(this.apiUrl, { params });
   }
 
   getRoomById(id: string): Observable<Room> {
