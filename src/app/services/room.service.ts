@@ -76,4 +76,8 @@ export class RoomService {
   deleteRoomImage(roomId: string, imageId: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${roomId}/images/${imageId}`);
   }
+  
+  updateImagesOrder(roomId: string, imagesOrder: { id: string, order: number }[]) {
+    return this.http.put<void>(`${this.apiUrl}/${roomId}/images/order`, imagesOrder);
+  }
 }

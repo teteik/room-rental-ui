@@ -9,9 +9,20 @@
         <div class="row">
             <div class="col-md-4">
                 @if (room.images && room.images.length > 0) {
-                    <div class="d-flex flex-column gap-2">
+                    <div class="d-flex flex-column gap-2"
+                    cdkDropList
+                    [cdkDropListData]="currentImages"
+                    [cdkDropListDisabled]="!authService.isAdmin()"
+                    (cdkDropListDropped)="drop($event)">
                         @for (img of room.images; track img.id) {
-                            <div class="position-relative">
+                            <div class="position-relative" cdkDrag 
+                            [cdkDragDisabled]="!authService.isAdmin()" 
+                            [style.cursor]="authService.isAdmin() ? 'grab' : 'default'">
+                            @if(authService.isAdmin()) {
+                                <div class="position-absolute" style="top: 8px; left: 8px; z-index: 10; background: rgba(0,0,0,0.6); color: white; border-radius: 4px; padding: 2px 6px; cursor: grab; font-size: 12px;">
+                                    ⋮⋮
+                                </div>
+                            }
                                 <img [src]="img.imageUrl"
                                     class="img-thumbnail" 
                                     style="width: 100%; max-height: 250px; object-fit: cover; cursor: zoom-in;"

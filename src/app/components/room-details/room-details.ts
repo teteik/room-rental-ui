@@ -6,6 +6,7 @@ import { BookingService } from '../../services/booking.service';
 import { BehaviorSubject, Observable, Subject, combineLatest, forkJoin, map, switchMap, takeUntil } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { ToastrService } from '../../services/toast.service';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 
 export interface TimeSlot {
   date: string;
@@ -25,7 +26,7 @@ export interface DaySchedule {
 @Component({
   selector: 'app-room-details',
   standalone: true,
-  imports: [AsyncPipe, RouterLink],
+  imports: [AsyncPipe, RouterLink, DragDropModule],
   templateUrl: './room-details.html',
   styleUrl: './room-details.css',
 })
@@ -352,4 +353,31 @@ export class RoomDetailsComponent implements OnInit, OnDestroy {
   closeLightBox(): void {
     this.activeImageUrl = null;
   }
+
+  get currentImages(): RoomImage[] {
+    return this.roomSubject.value?.images || [];
+  }
+
+  drop(event: CdkDragDrop<RoomImage[]>): void {
+    moveItemInArray(this.currentImages, event.previousIndex, event.currentIndex);
+
+    const updatedImages = this.currentImages.map((img, index) => ({
+      id: img.id,
+      order: index
+    }));
+    this.saveImagesOrder(this.roomSubject.value!.id, updatedImages);
+  }
+
+    private saveImagesOrder(roomId: string, imagesOrder: { id: string, order: number }[]): void {
+    this.roomService.updateImagesOrder(roomId, imagesOrder).subscribe({
+      next: () => {
+        this.toastrService.showSuccess('Порядок фотографий сохранен');
+      },
+      error: (err) => {
+        console.error('Ошибка сохранения порядка:', err);
+        this.toastrService.showError('Не удалось сохранить порядок фото');
+      }
+    });
+  }
+
 }
