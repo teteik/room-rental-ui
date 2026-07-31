@@ -1,0 +1,14 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: roomrental_frontend
+    ports:
+      - "4200:80"
+    networks:
+      - roomrental_net
+
+networks:
+  roomrental_net:
+    driver: bridge
