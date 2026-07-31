@@ -136,6 +136,17 @@ src/
 - **Angular CLI** 
 - **Запущенный Backend API** ([инструкция](https://github.com/teteik/RoomRental]))
 
+### Запуск через Docker (рекомендуется)
+
+Запустите фронтенд одной командой:
+
+```bash
+docker-compose up --build -d
+```
+
+Приложение будет доступно по адресу: http://localhost:4200
+
+### Альтернативный способ:
 ### 1. Клонирование репозитория
 ```bash
 git clone https://github.com/teteik/room-rental-ui.git
