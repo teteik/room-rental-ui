@@ -1,4 +1,3 @@
-/* ===== Контейнер формы ===== */
 .room-form-container {
   background: rgba(255, 255, 255, 0.65);
   backdrop-filter: blur(14px);
@@ -23,7 +22,6 @@
   }
 }
 
-/* ===== Заголовок ===== */
 .form-header {
   text-align: center;
   margin-bottom: 30px;
@@ -56,7 +54,6 @@
   font-weight: 500;
 }
 
-/* ===== Кнопка "Назад" ===== */
 .btn-back {
   display: inline-flex;
   align-items: center;
@@ -81,7 +78,6 @@
   box-shadow: 0 4px 12px rgba(31, 193, 226, 0.2);
 }
 
-/* ===== Лейблы ===== */
 .form-label-custom {
   display: flex;
   align-items: center;
@@ -97,7 +93,6 @@
   font-size: 16px;
 }
 
-/* ===== Инпуты (расширение .custom-input) ===== */
 .custom-input.is-invalid {
   border-color: #ee5a5a;
   background: rgba(255, 235, 235, 0.9);
@@ -115,7 +110,6 @@ textarea.custom-input {
   font-family: inherit;
 }
 
-/* ===== Ошибки валидации ===== */
 .invalid-feedback-custom {
   display: flex;
   align-items: center;
@@ -137,7 +131,6 @@ textarea.custom-input {
   75% { transform: translateX(4px); }
 }
 
-/* ===== Блок действий ===== */
 .form-actions {
   display: flex;
   justify-content: flex-end;
@@ -183,7 +176,6 @@ textarea.custom-input {
   font-size: 18px;
 }
 
-/* ===== Адаптив ===== */
 @media (max-width: 576px) {
   .room-form-container {
     padding: 24px 20px;
