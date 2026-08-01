@@ -4,6 +4,7 @@ import { RoomService, Room } from '../../services/room.service';
 import { AuthService } from '../../services/auth.service';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-admin-rooms',
@@ -28,7 +29,9 @@ export class AdminRoomsComponent implements OnInit {
   }
 
   private loadRooms(): void {
-    this.rooms$ = this.roomService.getRooms(); 
+    this.rooms$ = this.roomService.getRooms(undefined, undefined, undefined, 1, 1000).pipe(
+      map(response => response.items)
+    );
   }
 
   deleteRoom(id: string): void {

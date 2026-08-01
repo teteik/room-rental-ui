@@ -1,0 +1,75 @@
+.pagination-container {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.pagination-container .pagination {
+  margin-bottom: 0;
+  gap: 6px;
+}
+
+.pagination-container .page-item .page-link {
+  background: rgba(255, 255, 255, 0.7);
+  border: 2px solid rgba(133, 133, 133, 0.2);
+  border-radius: 10px;
+  color: #333;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 8px 16px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  min-width: 44px;
+  text-align: center;
+}
+
+.pagination-container .page-item .page-link:hover {
+  background: rgba(31, 193, 226, 0.15);
+  border-color: #1fc1e2;
+  color: #1fc1e2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(31, 193, 226, 0.2);
+}
+
+.pagination-container .page-item.active .page-link {
+  background: linear-gradient(135deg, #32f73a 0%, #1fc1e2 100%);
+  border-color: transparent;
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 4px 16px rgba(31, 193, 226, 0.4);
+  transform: translateY(-2px);
+}
+
+.pagination-container .page-item.active .page-link:hover {
+  background: linear-gradient(135deg, #32f73a 0%, #1fc1e2 100%);
+  color: white;
+}
+
+.pagination-container .page-item.disabled .page-link {
+  background: rgba(200, 200, 200, 0.3);
+  border-color: rgba(200, 200, 200, 0.2);
+  color: #aaa;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.pagination-info {
+  color: #555;
+  font-size: 14px;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.pagination-container .form-select {
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(133, 133, 133, 0.2);
+  border-radius: 10px;
+  font-weight: 600;
+  color: #333;
+  transition: all 0.2s ease;
+}

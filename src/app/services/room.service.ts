@@ -21,6 +21,11 @@ export interface BookedSlot {
   endTime: string;
 }
 
+export interface PagedResult<T> {
+  totalCount: number;
+  items: T[];
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -29,7 +34,13 @@ export class RoomService {
 
   private apiUrl = '/api/rooms';
 
-  getRooms(search?: string, minCapacity?: number, maxPrice?: number): Observable<Room[]> {
+  getRooms(
+    search?: string, 
+    minCapacity?: number, 
+    maxPrice?: number,
+    pageNumber: number = 1,
+    pageSize: number = 9
+  ): Observable<PagedResult<Room>> {
     let params = new HttpParams();
 
     if (search) {
@@ -41,8 +52,11 @@ export class RoomService {
     if (maxPrice !== null && maxPrice !== undefined) {
       params = params.set('maxPrice', maxPrice.toString());
     }
+    
+    params = params.set('pageNumber', pageNumber);
+    params = params.set('pageSize', pageSize);
 
-    return this.http.get<Room[]>(this.apiUrl, { params });
+    return this.http.get<PagedResult<Room>>(this.apiUrl, { params });
   }
 
   getRoomById(id: string): Observable<Room> {
