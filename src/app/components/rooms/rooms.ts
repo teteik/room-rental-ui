@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-rooms',
@@ -14,6 +15,7 @@ import { map } from 'rxjs/operators';
 })
 export class RoomsComponent implements OnInit {
   private roomService = inject(RoomService);
+  public authService = inject(AuthService);
 
   searchQuery: string = '';
   minCapacity?: number;

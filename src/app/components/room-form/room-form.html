@@ -1,74 +1,107 @@
 <div class="container mt-4">
-    <h2>Добавить новую комнату</h2>
+    <div class="room-form-container">
+        <div class="form-header">
+            <h2>
+                <i class="bi bi-plus-circle-fill"></i>
+                Добавить новую комнату
+            </h2>
+            <p class="form-subtitle">Заполните информацию о новой переговорной комнате</p>
+        </div>
 
-    <a [routerLink]="['/rooms']" class="btn btn-outline-secondary btn-sm mb-3">
-        Назад
-    </a>
+        <a [routerLink]="['/rooms']" class="btn-back">
+            <i class="bi bi-arrow-left"></i>
+            Назад к списку
+        </a>
 
-    <form [formGroup]="roomForm" (ngSubmit)="onSubmit()">
-        <div class="mb-3">
-            <label for="name" class="form-label">Название комнаты</label>
-            <input 
-                type="text" 
-                id="name" 
-                class="form-control" 
-                formControlName="name"
-                [class.is-invalid]="roomForm.get('name')?.invalid && roomForm.get('name')?.touched">
-            
-            @if (roomForm.get('name')?.invalid && roomForm.get('name')?.touched) {
-                <div class="invalid-feedback">
-                    Название обязательно
+        <form [formGroup]="roomForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+                <label for="name" class="form-label-custom">
+                    <i class="bi bi-door-open-fill"></i>
+                    Название комнаты
+                </label>
+                <input 
+                    type="text" 
+                    id="name" 
+                    class="custom-input w-100" 
+                    formControlName="name"
+                    placeholder="Например: Переговорная «Альфа»"
+                    [class.is-invalid]="roomForm.get('name')?.invalid && roomForm.get('name')?.touched">
+                
+                @if (roomForm.get('name')?.invalid && roomForm.get('name')?.touched) {
+                    <div class="invalid-feedback-custom">
+                        <i class="bi bi-exclamation-circle-fill"></i>
+                        Название обязательно
+                    </div>
+                }
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="capacity" class="form-label-custom">
+                        <i class="bi bi-people-fill"></i>
+                        Вместимость (чел.)
+                    </label>
+                    <input 
+                        type="number" 
+                        id="capacity" 
+                        class="custom-input w-100" 
+                        formControlName="capacity"
+                        placeholder="Например: 8"
+                        [class.is-invalid]="roomForm.get('capacity')?.invalid && roomForm.get('capacity')?.touched">
+                    
+                    @if (roomForm.get('capacity')?.invalid && roomForm.get('capacity')?.touched) {
+                        <div class="invalid-feedback-custom">
+                            <i class="bi bi-exclamation-circle-fill"></i>
+                            Вместимость должна быть больше 0
+                        </div>
+                    }       
                 </div>
-            }
-        </div>
 
-        <div class="mb-3">
-            <label for="capacity" class="form-label">Вместимость (чел.)</label>
-            <input 
-                type="number" 
-                id="capacity" 
-                class="form-control" 
-                formControlName="capacity"
-                [class.is-invalid]="roomForm.get('capacity')?.invalid && roomForm.get('capacity')?.touched">
-            
-            @if (roomForm.get('capacity')?.invalid && roomForm.get('capacity')?.touched) {
-                <div class="invalid-feedback">
-                    Вместимость должна быть больше 0
+                <div class="col-md-6 mb-3">
+                    <label for="pricePerHour" class="form-label-custom">
+                        <i class="bi bi-cash-coin"></i>
+                        Цена за час (руб.)
+                    </label>
+                    <input 
+                        type="number" 
+                        id="pricePerHour" 
+                        class="custom-input w-100" 
+                        formControlName="pricePerHour"
+                        placeholder="Например: 1500"
+                        [class.is-invalid]="roomForm.get('pricePerHour')?.invalid && roomForm.get('pricePerHour')?.touched">
+                    
+                    @if (roomForm.get('pricePerHour')?.invalid && roomForm.get('pricePerHour')?.touched) {
+                        <div class="invalid-feedback-custom">
+                            <i class="bi bi-exclamation-circle-fill"></i>
+                            Цена должна быть больше или равна 0
+                        </div>
+                    }
                 </div>
-            }       
-        </div>
+            </div>
 
-        <div class="mb-3">
-            <label for="pricePerHour" class="form-label">Цена за час (руб.)</label>
-            <input 
-                type="number" 
-                id="pricePerHour" 
-                class="form-control" 
-                formControlName="pricePerHour"
-                [class.is-invalid]="roomForm.get('pricePerHour')?.invalid && roomForm.get('pricePerHour')?.touched">
-            
-            @if (roomForm.get('pricePerHour')?.invalid && roomForm.get('pricePerHour')?.touched) {
-                <div class="invalid-feedback">
-                    Цена должна быть больше или равна 0
-                </div>
-            }
-        </div>
+            <div class="mb-3">
+                <label for="description" class="form-label-custom">
+                    <i class="bi bi-card-text"></i>
+                    Описание
+                </label>
+                <textarea 
+                    id="description" 
+                    class="custom-input w-100"
+                    rows="4" 
+                    formControlName="description"
+                    placeholder="Расскажите об оборудовании, особенностях комнаты...">
+                </textarea>
+            </div>
 
-        <div class="mb-3">
-            <label for="description" class="form-label">Описание</label>
-            <textarea 
-                id="description" 
-                class="form-control" 
-                rows="4" 
-                formControlName="description">
-            </textarea>
-        </div>
-
-        <button 
-            type="submit" 
-            class="btn btn-primary" 
-            [disabled]="roomForm.invalid">
-            {{ isEditMode ? 'Сохранить изменения' : 'Создать комнату' }}
-        </button>
-    </form>
+            <div class="form-actions">
+                <button 
+                    type="submit" 
+                    class="btn-submit" 
+                    [disabled]="roomForm.invalid">
+                    <i class="bi" [class]="isEditMode ? 'bi-check-circle-fill' : 'bi-plus-lg'"></i>
+                    {{ isEditMode ? 'Сохранить изменения' : 'Создать комнату' }}
+                </button>
+            </div>
+        </form>
+    </div>
 </div>

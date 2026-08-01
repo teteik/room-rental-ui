@@ -1,0 +1,206 @@
+/* ===== Контейнер формы ===== */
+.room-form-container {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  max-width: 800px;
+  margin: 0 auto;
+  animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Заголовок ===== */
+.form-header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid rgba(31, 193, 226, 0.2);
+}
+
+.form-header h2 {
+  color: #2c3e50;
+  font-weight: 700;
+  font-size: 28px;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.form-header h2 i {
+  color: #1fc1e2;
+  font-size: 32px;
+  filter: drop-shadow(0 2px 4px rgba(31, 193, 226, 0.4));
+}
+
+.form-subtitle {
+  color: #666;
+  font-size: 15px;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* ===== Кнопка "Назад" ===== */
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(133, 133, 133, 0.25);
+  border-radius: 10px;
+  padding: 8px 16px;
+  color: #555;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin-bottom: 24px;
+}
+
+.btn-back:hover {
+  background: rgba(31, 193, 226, 0.15);
+  border-color: #1fc1e2;
+  color: #1fc1e2;
+  transform: translateX(-4px);
+  box-shadow: 0 4px 12px rgba(31, 193, 226, 0.2);
+}
+
+/* ===== Лейблы ===== */
+.form-label-custom {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #333;
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+
+.form-label-custom i {
+  color: #1fc1e2;
+  font-size: 16px;
+}
+
+/* ===== Инпуты (расширение .custom-input) ===== */
+.custom-input.is-invalid {
+  border-color: #ee5a5a;
+  background: rgba(255, 235, 235, 0.9);
+  box-shadow: 0 0 0 3px rgba(238, 90, 90, 0.15);
+}
+
+.custom-input.is-invalid:focus {
+  border-color: #ee5a5a;
+  box-shadow: 0 0 0 3px rgba(238, 90, 90, 0.25);
+}
+
+textarea.custom-input {
+  resize: vertical;
+  min-height: 100px;
+  font-family: inherit;
+}
+
+/* ===== Ошибки валидации ===== */
+.invalid-feedback-custom {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ee5a5a;
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 6px;
+  animation: shakeIn 0.3s ease;
+}
+
+.invalid-feedback-custom i {
+  font-size: 14px;
+}
+
+@keyframes shakeIn {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+/* ===== Блок действий ===== */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30px;
+  padding-top: 24px;
+  border-top: 2px solid rgba(31, 193, 226, 0.2);
+}
+
+.btn-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #32f73a 0%, #1fc1e2 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 32px;
+  font-weight: 700;
+  font-size: 16px;
+  transition: all 0.25s ease;
+  box-shadow: 0 6px 20px rgba(31, 193, 226, 0.4);
+  cursor: pointer;
+}
+
+.btn-submit:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(31, 193, 226, 0.55);
+  filter: brightness(1.05);
+}
+
+.btn-submit:active:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.btn-submit:disabled {
+  background: linear-gradient(135deg, #c0c0c0 0%, #a0a0a0 100%);
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.7;
+}
+
+.btn-submit i {
+  font-size: 18px;
+}
+
+/* ===== Адаптив ===== */
+@media (max-width: 576px) {
+  .room-form-container {
+    padding: 24px 20px;
+  }
+
+  .form-header h2 {
+    font-size: 22px;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .form-actions {
+    justify-content: stretch;
+  }
+
+  .btn-submit {
+    width: 100%;
+    justify-content: center;
+  }
+}

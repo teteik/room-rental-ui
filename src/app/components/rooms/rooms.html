@@ -1,9 +1,11 @@
 <div class="container">
   <h2 class="mb-4">Список комнат</h2>
 
-  <a [routerLink]="['/rooms/new']" class="btn btn-outline-secondary btn-sm mb-3">
-    Добавить комнату
-  </a>
+  @if (authService.isAdmin()) {
+    <a [routerLink]="['/rooms/new']" class="btn btn-outline-secondary btn-sm mb-3">
+      Добавить комнату
+    </a>
+  }
 
   <div class="filter-panel p-4 mb-4">
     <h5 class="mb-3 fw-bold"> Фильтры поиска</h5>
